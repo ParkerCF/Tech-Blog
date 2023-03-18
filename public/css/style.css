@@ -1,19 +1,259 @@
-header, .project:not(:last-child) {
-    border-bottom: 1px solid #ccc;
-  }
-  
-  .no-button {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    color: #1b89bc;
-    text-decoration: none;
-    font-size: 100%;
-  }
-  
-  .no-button:hover {
-    color: #065b83;
-    text-decoration: underline;
-  }
-  
+/* custom styling for entire blog */
+/* body sets up very basic styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+  display: flex;
+  flex-direction: column;
+  background-color: whitesmoke;
+}
+/* sets uniform sizing and spacing */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0px;
+  border: 0px;
+  padding: 0px;
+  line-height: 1;
+}
+/* header background and positioning of children */
+header {
+  display: flex;
+  height: 100px;
+  background-color: royalblue;
+  justify-content: center;
+  align-items: center;
+}
+/* header text color */
+header h1 {
+  color: tan;
+}
+/* nav positioning, size, background color */
+nav {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  background-color: tan;
+  height: 50px;
+  align-items: center;
+}
+/* anchor elements in the nav, appearance, color, cursor, no underlines, sizing */
+nav a {
+  margin: 0px 20px;
+  color: navy;
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 100%;
+  transition: color 0.1s
+}
+/* change appearance when hovering over clickable links in nav */
+nav a:hover {
+  background-color: royalblue;
+  color: tan;
+  font-weight: 700;
+  transition: .4s;
+}
+/* main container flex behavior and size */
+main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+/* blog element flex direction and alignment */
+.blog {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+/* dashboard flex, sizing, alignment, border, spacing */
+#dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 25vw;
+  padding: 50px 0px;
+  border: 1px solid black;
+  border-radius: 7px;
+  margin-top: 25px;
+}
+/* vertical spacing except for last element */
+#dashboard div:not(:last-child) {
+  margin-bottom: 25px;
+}
+/* anchor element no underline, size, bold, color */
+#dashboard div p a {
+  text-decoration: none;
+  font-size: 1.2em;
+  font-weight: 600;
+  color: black;
+}
+/* hover effect of dashboard links */
+#dashboard div p a:hover {
+  background-color: navy;
+  color: whitesmoke;
+  transition: .4s;
+}
+/* post behavior and sizing */
+.post,
+.comment-box {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 20vh;
+}
+/* margins around posts and comments */
+.post-details,
+.comment-details {
+  margin: 20px 20px 0px 20px;
+}
+/* overwrites previous code */
+.comment-details {
+  padding-left: 60px;
+}
+/* header for posts and comments, colr, border, size */
+.post-header,
+.comment-header {
+  display: flex;
+  background-color: royalblue;
+  border: 1px solid black;
+  border-radius: 4px 4px 0px 0px;
+  width: 100%;
+}
+/* overwrites background color of previous code */
+.comment-header {
+  background-color: rgb(134, 91, 36);
+}
+/* links of headers appearance, spacing, no underline, color */
+.post-header a,
+.comment-header a {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  text-decoration: none;
+  color: black;
+  padding: 10px;
+}
+/* establishes border, size, background color of the body of posts/comments */
+.post-body,
+.comment-body {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  border-radius: 0px 0px 4px 4px;
+  width: 100%;
+  background-color: hwb(219 46% 0%);
+}
+/* overwrites background color of previous code */
+.comment-body {
+  background-color: rgb(233, 210, 178);
+}
+/* establishes spacing around text in the body of posts/comments */
+.post-body p,
+.comment-body p {
+  padding: 10px;
+}
+/* sets a border in the body separating the content from the author */
+.post-username,
+.username-section {
+  border-top: 1px solid grey;
+}
+/* sets up spacing for buttons */
+.username-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+/* sets up space between buttons */
+.edit-post-btn,
+.edit-comment-btn {
+  margin-right: 10px;
+}
+/* hover effects for buttons */
+.edit-post-btn button:hover,
+.edit-comment-btn button:hover,
+.form-line-btn button:hover,
+.login-card p a:hover,
+.post-header a:hover,
+.add-comment-btn button:hover {
+  background-color: darkslategray;
+  color: whitesmoke;
+  transition: .4s;
+  cursor: pointer;
+}
+/* resizes for comment page */
+.post-fix {
+  min-height: 0px;
+}
+/* resizes for comments page */
+.comment-fix {
+  margin-top: 0px;
+}
+/* styling for login box, border, size, postiiong, etc. */
+.login-card {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  width: 50%;
+  padding: 20px;
+  border: 1px solid black;
+  border-radius: 7px;
+  align-items: center;
+}
+/* signup/login title */
+.page-title {
+  padding-bottom: 20px;
+}
+/* form sizing */
+.signup-form,
+.login-form,
+#update-profile-form,
+#update-post-form,
+#update-comment-form,
+#write-post-form {
+  width: 80%;
+}
+/* sets spacing for each line of form */
+.form-line {
+  display: flex;
+  margin-bottom: 20px;
+}
+/* creates equal size lines for form */
+.form-line label {
+  width: 25%;
+}
+/* equal length of input box in forms */
+.form-line input {
+  width: 75%;
+}
+/* positioning for buttons in forms */
+.form-line-btn {
+  justify-content: center;
+}
+/* no underline in links */
+.login-card p a {
+  text-decoration: none;
+}
+/* sizing for large textarea */
+.form-input-content {
+  height: 20vh;
+  align-items: flex-start;
+  width: 75%;
+}
+/* generic code to center element */
+.center {
+  justify-content: center;
+  align-items: center;
+}
+/* generic code to hide element */
+.hidden {
+  display: none;
+}
