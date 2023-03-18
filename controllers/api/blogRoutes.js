@@ -1,53 +1,58 @@
 const router = require('express').Router();
-const { Blog } = require('../../models');
+const { Post } = require('../../models');
 const withAuth = require('../../utils/auth');
 
 router.post('/', withAuth, async (req, res) => {
+  console.log(req.body)
   try {
-    const newBlog = await Blog.create({
-      ...req.body,
+    const dbPostData = await Post.create({
+      title: req.body.postTitle,
+      post_text: req.body.postText,
       user_id: req.session.user_id,
     });
-
-    res.status(200).json(newBlog);
+    res.json(dbPostData);
   } catch (err) {
-    res.status(400).json(err);
+    console.log(err);
+    res.status(500).json(err);
   }
 });
 
+
 router.put('/:id', withAuth, async (req, res) => {
   try {
-    const [blogData] = await Blog.update(req.body, {
-      where: {
-        id: req.params.id,
+    console.log(req.body)
+    const dbPostData = await Post.update(
+      {
+        title: req.body.postTitle,
+        post_text: req.body.postText,
       },
-    });
-
-    if (blogData > 0) {
-      res.status(200).end();
-    } else {
-      res.status(404).end();
+      {
+        where: {
+          id: req.params.id,
+        },
+      }
+    );
+    console.log(dbPostData)
+    if (!dbPostData) {
+      res.status(400).json({ message: "Could not update post!" });
+      return;
     }
+    res.status(200).json({ message: "Post updated successfully!" });
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
+
 router.delete('/:id', withAuth, async (req, res) => {
   try {
-    const blogData = await Blog.destroy({
-      where: {
-        id: req.params.id,
-        user_id: req.session.user_id,
-      },
-    });
-
-    if (!blogData) {
-      res.status(404).json({ message: 'No blog found with this id!' });
+    console.log(req.params.id)
+    const dbPostData = await Post.destroy({ where: { id: req.params.id } });
+    if (!dbPostData) {
+      res.status(400).json({ message: "Could not delete post!" });
       return;
     }
-
-    res.status(200).json(blogData);
+    res.status(200).json({ message: "Post deleted successfully!" });
   } catch (err) {
     res.status(500).json(err);
   }
