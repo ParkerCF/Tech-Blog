@@ -1,52 +1,76 @@
 const router = require('express').Router();
-const { Blog, Comment, User } = require('../models');
+const { User, Post, Comment } = require('../models');
 const withAuth = require('../utils/auth');
 
 router.get('/', async (req, res) => {
   try {
-    const blogData = await Blog.findAll({
+    const dbPostData = await Post.findAll({
+      order: [['createdAt', 'DESC']],
       include: [
         {
           model: User,
-          attributes: ['name'],
+          attributes: ['username'],
         },
       ],
     });
 
-    const blogs = blogData.map((blog) => blog.get({ plain: true }));
-
-    res.render('homepage', { 
-      blogs, 
-      logged_in: req.session.logged_in 
+    const allPosts = dbPostData.map((post) =>
+      post.get({ plain: true })
+    );
+    for (let i = 0; i < allPosts.length; i++) {
+      const userIdMatch = allPosts[i].user_id === req.session.user_id
+      allPosts[i].userIdMatch = userIdMatch
+    }
+    console.log(allPosts)
+    res.render('all-posts', {
+      allPosts, loggedIn: req.session.loggedIn
     });
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
 
-router.get('/blog/:id', async (req, res) => {
+
+router.get('/post/:id', async (req, res) => {
   try {
-    const blogData = await Blog.findByPk(req.params.id, {
+    const dbPostData = await Post.findByPk(req.params.id, {
       include: [
         {
+          model: Comment,
+          include: [
+            {
+              model: User,
+              attributes: [
+                'username',
+              ],
+            }
+          ]
+        },
+        {
           model: User,
-          attributes: ['name'],
+          attributes: [
+            'username',
+          ],
         },
       ],
     });
-
-    const blog = blogData.get({ plain: true });
-
-    res.render('blog', {
-      ...blog,
-      logged_in: req.session.logged_in
-    });
+    const post = dbPostData.get({ plain: true });
+    const userIdMatch = post.user_id === req.session.user_id
+    console.log(post.comments)
+    for (let i = 0; i < post.comments.length; i++) {
+      const userIdCommentMatch = post.comments[i].user_id === req.session.user_id
+      post.comments[i].commentUserIdMatch = userIdCommentMatch
+    }
+    console.log(post)
+    res.render('post', { post, userIdMatch, loggedIn: req.session.loggedIn });
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
 
-router.get('/blog/:id/add-comment', withAuth, async (req, res) => {
+router.get('/post/:id/add-comment', withAuth, async (req, res) => {
   try {
     res.render('add-comment', {id: req.params.id, loggedIn: req.session.loggedIn });
   } catch (err) {
@@ -56,20 +80,18 @@ router.get('/blog/:id/add-comment', withAuth, async (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-  if (req.session.logged_in) {
-    res.redirect('/profile');
+  if (req.session.loggedIn) {
+    res.redirect('/dashboard');
     return;
   }
-
   res.render('login');
 });
 
 router.get('/signup', (req, res) => {
   if (req.session.loggedIn) {
-    res.redirect('/');
+    res.redirect('/dashboard');
     return;
   }
-
   res.render('signup');
 });
 
